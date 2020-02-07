@@ -55,7 +55,10 @@ function createMemo(id, text, position, size) {
     activeMemo = e.target.parentNode;
     activeMemo.style.zIndex = STATIC_INDEX;
   });
-  textarea.addEventListener("blur", function (e) { e.target.classList.remove("active"); }, { passive: false, useCapture: false });
+  textarea.addEventListener("blur", function (e) {
+    e.target.classList.remove("active");
+    e.target.parentNode.querySelector(".markdown").classList.remove("hidden");
+  }, { passive: false, useCapture: false });
   textarea.addEventListener("input", function (e) {
     const memos = getLocalStorageItem("manifest_memos");
     memos[id] = { ...memos[id], text: e.target.value };
@@ -63,6 +66,14 @@ function createMemo(id, text, position, size) {
   }, { passive: false, useCapture: false });
 
   memo.appendChild(textarea);
+
+  const markdown = document.createElement("div");
+  markdown.classList.add("markdown");
+  markdown.addEventListener("click", function (e) {
+    e.target.classList.add("hidden");
+    e.target.parentNode.querySelector("textarea").focus();
+  });
+  memo.appendChild(markdown);
 
   const drag = document.createElement("div");
   drag.classList.add("drag");
@@ -220,7 +231,7 @@ function handleMemoResizeStart(e) {
 
     document.addEventListener("mouseup", handleMemoResizeEnd, { passive: false, useCapture: false });
     document.addEventListener("touchcancel", handleMemoResizeEnd, { passive: false, useCapture: false });
-    document.addEventListener("touchend", handleMemoResizeEnd, { passive: false, useCapture: false }); ;
+    document.addEventListener("touchend", handleMemoResizeEnd, { passive: false, useCapture: false });
   }
 };
 
