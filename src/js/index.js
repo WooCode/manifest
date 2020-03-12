@@ -1,6 +1,6 @@
 import { GRID_SIZE, MARGIN, DRAG_INDEX, STATIC_INDEX, DEFAULT_MEMO } from "./globals";
 import { snapToGrid, confirm, generateUUID, getLocalStorageItem, setLocalStorageItem, decreaseAllMemoIndexes, checkBounds } from "./utils";
-import { compileMarkdown } from "./markdown";
+import { compileMarkdown } from "./todo-list";
 
 import "../sass/index.scss";
 
