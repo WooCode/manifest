@@ -1,69 +1,58 @@
-let index = 0;
-let indexToUpdate = 0;
+const matchTodoItem = line =>
+  line.match(
+    /^(?<indentation>[\s]*)- \[(?<checked>[xX]?)[\s]?\](?<content> .*)/
+  );
 
-function compileTodoItem(text) {
-  const regex = /^(?<indentation>[\s]*)- \[(?<checked>[xX]?)[\s]?\](?<content> .*)/;
-  const found = text.match(regex);
-  if (found != null) {
-    const checked = !!found.groups.checked;
-    const todoText = found.groups.content;
+export function updateNote(text, id) {
+  if (!text) return "";
 
-    index++;
-    return `<li><input${checked ? ' checked="" ' : " "}type="checkbox" checkbox-id="${index}">${todoText}</li>`;
-  } else {
-    return text;
-  }
-}
+  return text
+    .split("\n")
+    .reduce(
+      (acc, line) => {
+        const [count, text] = acc;
+        const todoItemMatch = matchTodoItem(line);
+        if (!todoItemMatch) return [count, [...text, line]];
+        if (count + 1 !== id) return [count + 1, [...text, line]];
 
-function updateTodoText(text) {
-  const regex = /^(?<indentation>[\s]*)- \[(?<checked>[xX]?)[\s]?\](?<content> .*)/;
-  const found = text.match(regex);
-  if (found != null) {
-    let checked = !!found.groups.checked;
-    const todoText = found.groups.content;
-    const indentation = found.groups.indentation;
+        const parts = todoItemMatch.groups;
+        const checked = !!parts.checked;
+        const itemText = parts.content;
+        const indentation = parts.indentation;
+        const toggledLine = `${indentation}- [${
+          checked ? " " : "x"
+        }]${itemText}`;
 
-    index++;
-    if (index === indexToUpdate) checked = !checked;
-    return `${indentation}- [${checked ? "x" : " "}]${todoText}`;
-  } else {
-    return text;
-  }
-}
-
-function compileTodoList(match, p1, p2, p3, offset, string) {
-  const rows = match.split("\n");
-  const compiledRows = rows.map(r => compileTodoItem(r));
-  const joinedRows = compiledRows.join("");
-
-  return `<ul>${joinedRows}</ul>`;
-}
-
-function updateToDoList(match, p1, p2, p3, offset, string) {
-  const rows = match.split("\n");
-  const compiledRows = rows.map(r => updateTodoText(r));
-  const joinedRows = compiledRows.join("\n");
-
-  return joinedRows;
+        return [count + 1, [...text, toggledLine]];
+      },
+      [0, []]
+    )[1]
+    .join("\n");
 }
 
 export function compileNote(text) {
-  if (!text) {
-    return "";
-  }
+  if (!text) return "";
 
-  index = 0;
+  let id = 0;
 
-  return text.replace(/(^([\s]*)- \[([xX]?)[\s]?\] (.*)$[\n]?)+/gm, compileTodoList);
+  return text.replace(/(^([\s]*)- \[([xX]?)[\s]?\] (.*)$[\n]?)+/gm, match => {
+    const rows = match.split("\n");
+    const compiledRows = rows.map(row => {
+      const todoItemMatch = matchTodoItem(row);
+      if (!todoItemMatch) return text;
+
+      id++;
+
+      const checked = !!todoItemMatch.groups.checked;
+      const todoText = todoItemMatch.groups.content;
+
+      return `<li><input${
+        checked ? ' checked="" ' : " "
+      }type="checkbox" data-checkbox-id="${id}">${todoText}</li>`;
+    });
+    const joinedRows = compiledRows.join("");
+
+    return `<ul>${joinedRows}</ul>`;
+  });
 }
 
-export function updateNote(text, id) {
-  if (!text) {
-    return "";
-  }
-
-  index = 0;
-  indexToUpdate = parseInt(id);
-
-  return text.replace(/(^([\s]*)- \[([xX]?)[\s]?\] (.*)$[\n]?)+/gm, updateToDoList);
-}

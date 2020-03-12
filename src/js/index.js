@@ -76,9 +76,9 @@ function createMemo(id, text, position, size) {
   renderedOutput.addEventListener("click", function (e) {
     var targettype = e.target.getAttribute("type");
     if (targettype != null && targettype === "checkbox") {
-      const checkboxId = e.target.getAttribute("checkbox-id");
+      const checkboxId = e.target.dataset.checkboxId;
       const textarea = document.querySelector(`[data-id='${id}'] textarea`);
-      textarea.value = updateNote(textarea.value, checkboxId);
+      textarea.value = updateNote(textarea.value, parseInt(checkboxId));
     } else {
       renderedOutput.classList.add("hidden");
       document.querySelector(`[data-id='${id}'] textarea`).focus();
