@@ -91,7 +91,12 @@ body {
                     border-bottom: 1px solid var(--foreground);
                 }
 
-                textarea.input {
+                .hidden {
+                    display: none;
+                }
+
+                textarea.input,
+                .markdown {
                     position: absolute;
                     top: 17px;
                     left: 0px;
