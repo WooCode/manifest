@@ -45,7 +45,9 @@ function createMemo(id, text, position, size) {
   textarea.setAttribute("placeholder", "Add a short memo...");
   textarea.setAttribute("autocomplete", true);
 
-  if (text) { textarea.value = text; }
+  if (text) {
+    textarea.value = text;
+  }
 
   textarea.addEventListener("focus", function (e) {
     e.target.classList.add("active");
@@ -74,6 +76,7 @@ function createMemo(id, text, position, size) {
     e.target.classList.add("hidden");
     e.target.parentNode.querySelector("textarea").focus();
   });
+  renderedOutput.innerHTML = compileNote(text);
   memo.appendChild(renderedOutput);
 
   const drag = document.createElement("div");

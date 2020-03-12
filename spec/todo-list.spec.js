@@ -19,3 +19,9 @@ test("Creates todo list of one checked item, upper case x.", () => {
 test("Creates todo list of two items", () => {
   expect(compileNote("- [ ] foo\n- [ ] bar")).toBe('<ul><li><input disabled="" type="checkbox"> foo</li><li><input disabled="" type="checkbox"> bar</li></ul>');
 });
+
+test("Create empty note on empty input", () => {
+  expect(compileNote(null)).toBe("");
+  expect(compileNote(undefined)).toBe("");
+  expect(compileNote("")).toBe("");
+});
