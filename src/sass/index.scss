@@ -97,7 +97,7 @@ body {
 
                 textarea.input,
                 .rendered-output {
-                    white-space: pre;
+                    white-space: pre-wrap;
                     position: absolute;
                     top: 17px;
                     left: 0px;
