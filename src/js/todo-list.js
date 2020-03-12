@@ -1,7 +1,10 @@
 function compileRow(text) {
-  if (text.startsWith("- [ ]")) {
-    const todoText = text.substring("- [ ]".length);
-    return `<ul><li><input disabled="" type="checkbox">${todoText}</li></ul>`;
+  const regex = /^(?<indentation>[\s]*)- \[(?<checked>[xX]?)[\s]?\](?<content> .*)/;
+  const found = text.match(regex);
+  if (found != null) {
+    const checked = !!found.groups.checked;
+    const todoText = found.groups.content;
+    return `<ul><li><input disabled=""${checked ? ' checked="" ' : " "}type="checkbox">${todoText}</li></ul>`;
   } else {
     return text;
   }
