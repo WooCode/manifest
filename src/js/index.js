@@ -1,6 +1,6 @@
 import { GRID_SIZE, MARGIN, DRAG_INDEX, STATIC_INDEX, DEFAULT_MEMO } from "./globals";
 import { snapToGrid, confirm, generateUUID, getLocalStorageItem, setLocalStorageItem, decreaseAllMemoIndexes, checkBounds } from "./utils";
-import { compileMarkdown } from "./todo-list";
+import { compileTodoList } from "./todo-list";
 
 import "../sass/index.scss";
 
@@ -57,24 +57,24 @@ function createMemo(id, text, position, size) {
   });
   textarea.addEventListener("blur", function (e) {
     e.target.classList.remove("active");
-    e.target.parentNode.querySelector(".markdown").classList.remove("hidden");
+    e.target.parentNode.querySelector(".rendered-output").classList.remove("hidden");
   }, { passive: false, useCapture: false });
   textarea.addEventListener("input", function (e) {
     const memos = getLocalStorageItem("manifest_memos");
     memos[id] = { ...memos[id], text: e.target.value };
     setLocalStorageItem("manifest_memos", memos);
-    document.querySelector("#markdown-output").innerHTML = compileMarkdown(e.target.value);
+    document.querySelector(`[data-id='${id}'] .rendered-output`).innerHTML = compileTodoList(e.target.value);
   }, { passive: false, useCapture: false });
 
   memo.appendChild(textarea);
 
-  const markdown = document.createElement("div");
-  markdown.classList.add("markdown");
-  markdown.addEventListener("click", function (e) {
+  const renderedOutput = document.createElement("div");
+  renderedOutput.classList.add("rendered-output");
+  renderedOutput.addEventListener("click", function (e) {
     e.target.classList.add("hidden");
     e.target.parentNode.querySelector("textarea").focus();
   });
-  memo.appendChild(markdown);
+  memo.appendChild(renderedOutput);
 
   const drag = document.createElement("div");
   drag.classList.add("drag");

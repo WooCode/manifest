@@ -96,7 +96,8 @@ body {
                 }
 
                 textarea.input,
-                .markdown {
+                .rendered-output {
+                    white-space: pre;
                     position: absolute;
                     top: 17px;
                     left: 0px;
@@ -155,8 +156,4 @@ body {
             }
         }
     }
-}
-
-.markdown {
-  white-space: pre;
 }
