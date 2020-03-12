@@ -73,8 +73,10 @@ function createMemo(id, text, position, size) {
   const renderedOutput = document.createElement("div");
   renderedOutput.classList.add("rendered-output");
   renderedOutput.addEventListener("click", function (e) {
-    e.target.classList.add("hidden");
-    e.target.parentNode.querySelector("textarea").focus();
+    // if (e.target !== renderedOutput) return;
+    renderedOutput.classList.add("hidden");
+    document.querySelector(`[data-id='${id}'] textarea`).focus();
+    // e.target.parentNode.querySelector("textarea").focus();
   });
   renderedOutput.innerHTML = compileNote(text);
   memo.appendChild(renderedOutput);
