@@ -1,5 +1,6 @@
-var index = 0;
-var indexToUpdate = 0;
+let index = 0;
+let indexToUpdate = 0;
+
 function compileTodoItem(text) {
   const regex = /^(?<indentation>[\s]*)- \[(?<checked>[xX]?)[\s]?\](?<content> .*)/;
   const found = text.match(regex);
@@ -46,19 +47,23 @@ function updateToDoList(match, p1, p2, p3, offset, string) {
   return joinedRows;
 }
 
-export function updateNote(text, id) {
-  if (!text) {
-    return "";
-  }
-  index = 0;
-  indexToUpdate = parseInt(id);
-  return text.replace(/(^([\s]*)- \[([xX]?)[\s]?\] (.*)$[\n]?)+/gm, updateToDoList);
-}
-
 export function compileNote(text) {
   if (!text) {
     return "";
   }
+
   index = 0;
+
   return text.replace(/(^([\s]*)- \[([xX]?)[\s]?\] (.*)$[\n]?)+/gm, compileTodoList);
+}
+
+export function updateNote(text, id) {
+  if (!text) {
+    return "";
+  }
+
+  index = 0;
+  indexToUpdate = parseInt(id);
+
+  return text.replace(/(^([\s]*)- \[([xX]?)[\s]?\] (.*)$[\n]?)+/gm, updateToDoList);
 }
