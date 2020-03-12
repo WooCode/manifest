@@ -1,6 +1,6 @@
 import { GRID_SIZE, MARGIN, DRAG_INDEX, STATIC_INDEX, DEFAULT_MEMO } from "./globals";
 import { snapToGrid, confirm, generateUUID, getLocalStorageItem, setLocalStorageItem, decreaseAllMemoIndexes, checkBounds } from "./utils";
-import { compileNote } from "./todo-list";
+import { compileNote, updateNote } from "./todo-list";
 
 import "../sass/index.scss";
 
@@ -74,8 +74,15 @@ function createMemo(id, text, position, size) {
   const renderedOutput = document.createElement("div");
   renderedOutput.classList.add("rendered-output");
   renderedOutput.addEventListener("click", function (e) {
-    renderedOutput.classList.add("hidden");
-    document.querySelector(`[data-id='${id}'] textarea`).focus();
+    var targettype = e.target.getAttribute("type");
+    if (targettype != null && targettype === "checkbox") {
+      const checkboxId = e.target.getAttribute("checkbox-id");
+      const textarea = document.querySelector(`[data-id='${id}'] textarea`);
+      textarea.value = updateNote(textarea.value, checkboxId);
+    } else {
+      renderedOutput.classList.add("hidden");
+      document.querySelector(`[data-id='${id}'] textarea`).focus();
+    }
   });
   renderedOutput.innerHTML = compileNote(text);
   memo.appendChild(renderedOutput);
