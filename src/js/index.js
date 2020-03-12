@@ -1,6 +1,6 @@
 import { GRID_SIZE, MARGIN, DRAG_INDEX, STATIC_INDEX, DEFAULT_MEMO } from "./globals";
 import { snapToGrid, confirm, generateUUID, getLocalStorageItem, setLocalStorageItem, decreaseAllMemoIndexes, checkBounds } from "./utils";
-import { compileTodoList } from "./todo-list";
+import { compileNote } from "./todo-list";
 
 import "../sass/index.scss";
 
@@ -63,7 +63,7 @@ function createMemo(id, text, position, size) {
     const memos = getLocalStorageItem("manifest_memos");
     memos[id] = { ...memos[id], text: e.target.value };
     setLocalStorageItem("manifest_memos", memos);
-    document.querySelector(`[data-id='${id}'] .rendered-output`).innerHTML = compileTodoList(e.target.value);
+    document.querySelector(`[data-id='${id}'] .rendered-output`).innerHTML = compileNote(e.target.value);
   }, { passive: false, useCapture: false });
 
   memo.appendChild(textarea);
