@@ -36,10 +36,9 @@ export function compileNote(text) {
   let id = 0;
 
   return text.replace(/(^([\s]*)- \[([xX]?)[\s]?\] (.*)$[\n]?)+/gm, match => {
-    const rows = match.split("\n");
+    const rows = match.trim().split("\n");
     const compiledRows = rows.map(row => {
       const todoItemMatch = matchTodoItem(row);
-      if (!todoItemMatch) return text;
 
       id++;
 
@@ -55,4 +54,3 @@ export function compileNote(text) {
     return `<ul>${joinedRows}</ul>`;
   });
 }
-
