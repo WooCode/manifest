@@ -60,6 +60,7 @@ function createMemo(id, text, position, size) {
   textarea.addEventListener("blur", function (e) {
     e.target.classList.remove("active");
     e.target.parentNode.querySelector(".rendered-output").classList.remove("hidden");
+    e.target.parentNode.querySelector(".rendered-output").innerHTML = compileNote(e.target.value);
   }, { passive: false, useCapture: false });
   textarea.addEventListener("input", function (e) {
     const memos = getLocalStorageItem("manifest_memos");
@@ -73,10 +74,8 @@ function createMemo(id, text, position, size) {
   const renderedOutput = document.createElement("div");
   renderedOutput.classList.add("rendered-output");
   renderedOutput.addEventListener("click", function (e) {
-    // if (e.target !== renderedOutput) return;
     renderedOutput.classList.add("hidden");
     document.querySelector(`[data-id='${id}'] textarea`).focus();
-    // e.target.parentNode.querySelector("textarea").focus();
   });
   renderedOutput.innerHTML = compileNote(text);
   memo.appendChild(renderedOutput);

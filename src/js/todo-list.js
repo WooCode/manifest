@@ -5,7 +5,7 @@ function compileTodoItem(text) {
     const checked = !!found.groups.checked;
     const todoText = found.groups.content;
 
-    return `<li><input disabled=""${checked ? ' checked="" ' : " "}type="checkbox">${todoText}</li>`;
+    return `<li><input${checked ? ' checked="" ' : " "}type="checkbox">${todoText}</li>`;
   } else {
     return text;
   }
